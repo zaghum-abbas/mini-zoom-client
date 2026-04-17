@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
-function socketBaseUrl() {
+const socketBaseUrl = () => {
   const envUrl = import.meta.env.VITE_API_URL;
   if (envUrl) return envUrl.replace(/\/$/, '');
   const { protocol, hostname } = window.location;
   return `${protocol}//${hostname}:5000`;
-}
+};
 
-export function useMeetingSocket(meetingId) {
+export const useMeetingSocket = (meetingId) => {
   const { token } = useAuth();
   const [live, setLive] = useState({ participants: [], status: null, events: [] });
 
@@ -56,4 +56,4 @@ export function useMeetingSocket(meetingId) {
   }, [meetingId, token]);
 
   return live;
-}
+};

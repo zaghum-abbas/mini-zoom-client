@@ -1,25 +1,39 @@
+import { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { ProtectedRoute } from '../components/auth/ProtectedRoute.jsx';
 import { MainLayout } from '../layouts/MainLayout.jsx';
-import { LoginPage } from '../pages/LoginPage.jsx';
-import { RegisterPage } from '../pages/RegisterPage.jsx';
-import { DashboardPage } from '../pages/DashboardPage.jsx';
-import { MeetingDetailPage } from '../pages/MeetingDetailPage.jsx';
+import { ProtectedRoute } from '@/utils/ProtectedRoute.jsx';
+import { Spinner } from '@/components/ui/spinner.jsx';
 
-export function AppRoutes() {
+const LoginPage = lazy(() => import('../pages/LoginPage.jsx').then((m) => ({ default: m.LoginPage })));
+const RegisterPage = lazy(() => import('../pages/RegisterPage.jsx').then((m) => ({ default: m.RegisterPage })));
+const DashboardPage = lazy(() => import('../pages/DashboardPage.jsx').then((m) => ({ default: m.DashboardPage })));
+const MeetingDetailPage = lazy(() =>
+  import('../pages/MeetingDetailPage.jsx').then((m) => ({ default: m.MeetingDetailPage }))
+);
+
+export const AppRoutes = () => {
   return (
-    <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+    <Suspense
+      fallback={
+        <div className="mx-auto flex min-h-[60vh] w-full max-w-6xl items-center justify-center px-4 py-12">
+          <Spinner size={26} />
+          <span className="sr-only">Loading…</span>
+        </div>
+      }
+    >
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
 
-      <Route element={<ProtectedRoute />}>
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<DashboardPage />} />
-          <Route path="/meetings/:id" element={<MeetingDetailPage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<DashboardPage />} />
+            <Route path="/meetings/:id" element={<MeetingDetailPage />} />
+          </Route>
         </Route>
-      </Route>
 
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Suspense>
   );
-}
+};

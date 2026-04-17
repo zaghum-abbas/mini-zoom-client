@@ -1,11 +1,13 @@
 import { AppRoutes } from './routes/AppRoutes.jsx';
 import { Toaster } from 'react-hot-toast';
 
-export default function App() {
+const App = () => {
   return (
     <>
       <AppRoutes />
       <Toaster position="top-right" toastOptions={{ duration: 3500 }} />
     </>
   );
-}
+};
+
+export default App;

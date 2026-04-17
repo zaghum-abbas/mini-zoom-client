@@ -4,9 +4,9 @@ import { setAuthToken } from '../services/api.js';
 
 const AuthContext = createContext(null);
 
-const TOKEN_KEY = 'mm_token';
+const TOKEN_KEY = import.meta.env.VITE_TOKEN_KEY;
 
-export function AuthProvider({ children }) {
+export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY));
   const [user, setUser] = useState(null);
   const [ready, setReady] = useState(() => !localStorage.getItem(TOKEN_KEY));
@@ -91,10 +91,10 @@ export function AuthProvider({ children }) {
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
+};
 
-export function useAuth() {
+export const useAuth = () => {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error('useAuth must be used within AuthProvider');
   return ctx;
-}
+};

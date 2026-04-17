@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { AppHeader } from '../components/layout/AppHeader.jsx';
 
-export function MainLayout() {
+export const MainLayout = () => {
   return (
     <div className="layout">
       <AppHeader />
@@ -10,4 +10,4 @@ export function MainLayout() {
       </main>
     </div>
   );
-}
+};
